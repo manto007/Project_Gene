@@ -1,0 +1,27 @@
+import gzip
+
+def parse_gff(gff_file):
+    pseudogene_ids = []
+    with gzip.open(gff_file, 'rt', encoding='latin-1') as handle:
+        for line in handle:
+            if line.startswith("#"):
+                continue
+            fields = line.strip().split("\t")
+            if "pseudogene" in fields[2] and "ID" in fields[8]:
+                pseudogene_id = fields[8].split(";")[0].split("=")[1]
+                pseudogene_ids.append(pseudogene_id)
+    return pseudogene_ids
+
+def main():
+    gff_file_path = "tuberculosis.gff"  # Replace with the path to your GFF file
+
+    pseudogene_ids = parse_gff(gff_file_path)
+
+    print(f"There are {len(pseudogene_ids)} pseudogenes.")
+    print("List of Pseudogene IDs:")
+    for pseudogene_id in pseudogene_ids:
+        print(pseudogene_id)
+
+if __name__ == "__main__":
+    main()
+
