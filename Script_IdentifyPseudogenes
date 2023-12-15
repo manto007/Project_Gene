@@ -1,0 +1,44 @@
+import gzip
+from Bio.SeqFeature import SeqFeature, FeatureLocation
+
+def parse_gff(gff_file):
+    features = []
+    with gzip.open(gff_file, 'rt', encoding='latin-1') as handle:
+        for line in handle:
+            if line.startswith("#"):
+                continue
+            fields = line.strip().split("\t")
+manto007@bluejay:~/gen220/gene_project/github/Project_Gene$ nano Script_IdentifyPseudogenes
+
+  GNU nano 2.9.8                                                           Script_IdentifyPseudogenes                                                                     
+
+            features.append(feature)
+    return features
+
+def investigate_pseudogenes(gff_features):
+    pseudogenes = [feature for feature in gff_features if "pseudogene" in feature.qualifiers.get("gene_type", [])]
+    return pseudogenes
+
+def print_pseudogene_details(pseudogene):
+    print(f"ID: {pseudogene.id}")
+    print(f"Type: {pseudogene.type}")
+    print(f"Location: {pseudogene.location}")
+    print(f"Qualifiers: {pseudogene.qualifiers}")
+    print("")
+
+def main():
+    gff_file_path = "tuberculosis.gff"  # Replace with the path to your GFF file
+
+    gff_features = parse_gff(gff_file_path)
+
+    pseudogenes = investigate_pseudogenes(gff_features)
+
+    print(f"There are {len(pseudogenes)} pseudogenes with an average length of {calculate_average_length(pseudogenes)}")
+
+    # Print details of each pseudogene
+    print("Details of Pseudogenes:")
+    for pseudogene in pseudogenes:
+        print_pseudogene_details(pseudogene)
+
+if __name__ == "__main__":
+    main()
